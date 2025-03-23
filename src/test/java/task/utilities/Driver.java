@@ -49,7 +49,7 @@ public class Driver {
 
 
     @AfterMethod(alwaysRun = true)
-    public static void closeDriver(ITestResult result) throws IOException {
+    public void closeDriver(ITestResult result) throws IOException {
 
         if(result.getStatus() == ITestResult.SUCCESS) {
             // new File(System.getProperty("user.dir")+"/target");
