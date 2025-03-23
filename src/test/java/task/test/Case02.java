@@ -1,53 +1,47 @@
 package task.test;
 
-import org.openqa.selenium.support.ui.Select;
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import task.pages.BasePage;
 import task.pages.QAPage;
 import task.utilities.ConfigReader;
 import task.utilities.Driver;
-import task.utilities.Methods;
 
 public class Case02 {
 
 
-   @Test
+   @Test(priority = 2)
     public void test02(){
 
        QAPage qaPage= new QAPage();
+       BasePage basePage=new BasePage();
 
        //Go to https://useinsider.com/careers/quality-assurance/
        Driver.getDriver().get(ConfigReader.getProperty("careersUrl"));
-       Methods.acceptCookies();
-       Methods.wait(2);
+       basePage.acceptCookies();
 
        //Click “See all QA jobs”
-       qaPage.seeAllButton.click();
+       basePage.click(qaPage.seeAllButton);
 
        //Filter jobs by Location: “Istanbul, Turkey”, and Department: “Quality Assurance”
-       qaPage.departmentDropdown.click();
-       Methods.wait(20);
-       qaPage.locationDropdown.click();
-       qaPage.istanbulArea.click();
-       Methods.wait(3);
+       basePage.wait(10);
+      //basePage.click(qaPage.departmentDropdown);
+       basePage.click(qaPage.locationDropdown);
+       basePage.click(qaPage.istanbulArea);
 
        //Check the presence of the job list
-       Methods.scrollToElement(Driver.getDriver(), qaPage.resultCounter);
+       basePage.scrollToElement(Driver.getDriver(), qaPage.resultCounter);
       // Assert.assertTrue(qaPage.jobList.isDisplayed());
 
        //Check that all jobs’ Position contains “Quality Assurance”, Department contains
        //“Quality Assurance”, and Location contains “Istanbul, Turkey”
-       Methods.checkAllQaPositions();
-
+       qaPage.checkAllQaPositions();
 
        //Click the “View Role” button and check that this action redirects us to the Lever
        //Application form page
-       qaPage.viewRole.click();
-       Methods.switchToWindowByUrl("lever");
-       String expectedNewUrl= "lever";
-       String actualNewUrl= Driver.getDriver().getCurrentUrl();
-       Assert.assertTrue(actualNewUrl.contains(expectedNewUrl));
-
+       basePage.moveToElement(qaPage.viewRole);
+       basePage.click(qaPage.viewRole);
+       basePage.switchToWindowByUrl("lever");
+       basePage.assert_url("lever");
 
 
     }
